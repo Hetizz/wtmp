@@ -13,3 +13,12 @@ body {
   color: white;
   padding: 3px;
 }
+
+#container {
+  display: flex;
+  flex-flow: column wrap;
+}
+
+#buttonGroup {
+  margin: 15px;
+}
