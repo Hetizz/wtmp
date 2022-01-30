@@ -6,7 +6,7 @@ const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: {
-    app: './src/lunch.js',
+    app: './src/data.js',
   },
   plugins: [
     new CleanWebpackPlugin(),
@@ -19,11 +19,11 @@ module.exports = {
       },
     ]}),
     new HtmlWebpackPlugin({
-      title: 'WTMP Starter',
+      title: 'Data manipulation',
       meta: {
         viewport: 'width=device-width, initial-scale=1.0'
       },
-      template: './src/lunch.html',
+      template: './src/index.html',
       minify: {
         removeComments: true,
         collapseWhitespace: true
