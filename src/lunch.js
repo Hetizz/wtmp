@@ -1,24 +1,19 @@
-import SodexoData from './assets/sodexo.json';
+import SodexoData from './modules/sodexo-data.js';
+import FazerData from './modules/fazer-data';
 
 //console.log(SodexoData.courses);
-
-const coursesEn = [];
-const coursesFi = [];
+console.log(FazerData.FazerEn);
+console.log(FazerData.FazerFi);
 
 let language = 'fi';
-let currentMenu = coursesFi;
+let currentMenu = SodexoData.coursesFi;
 
 const menu = document.querySelector('#menu');
 let menuOrder = 'asc';
 
-const createMenus = (menu) => {
-  const courses = Object.values(menu);
-  for (const course of courses) {
-    coursesFi.push(course.title_fi);
-    coursesEn.push(course.title_en);
-  }
-};
-
+/**
+ * Prints the menu on page
+ */
 const printMenu = () => {
   menu.innerHTML = '';
   for (const item of currentMenu) {
@@ -28,16 +23,25 @@ const printMenu = () => {
   }
 };
 
+/**
+ * Switch language fi/en
+ */
 const switchLanguage = () => {
   if (language === 'fi') {
     language = 'en';
-    currentMenu = coursesEn;
+    currentMenu = SodexoData.coursesEn;
   } else {
     language = 'fi';
-    currentMenu = coursesFi;
+    currentMenu = SodexoData.coursesFi;
   }
 };
 
+/**
+ *
+ * @param {Array} courses
+ * @param {string} order
+ * @returns {Array}
+ */
 const sortCourses = (courses, order) => {
   let sortedCourses = courses.sort();
   if (order === 'asc') {
@@ -49,12 +53,15 @@ const sortCourses = (courses, order) => {
   return sortedCourses;
 };
 
+/**
+ * picks a random dish from menu
+ * @param {array} courses
+ */
 const pickRandom = (courses) => {
   const randomIndex = Math.floor(Math.random() * currentMenu.length);
   alert(currentMenu[randomIndex]);
 };
 
-createMenus(SodexoData.courses);
 printMenu();
 
 document.querySelector('#vaihto').addEventListener('click', () => {
@@ -70,3 +77,5 @@ document.querySelector('#sort').addEventListener('click', () => {
 document.querySelector('#random').addEventListener('click', () => {
   pickRandom();
 });
+
+
