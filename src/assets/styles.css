@@ -22,3 +22,17 @@ body {
 #buttonGroup {
   margin: 15px;
 }
+#menu {
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 10px;
+}
+#fazerMenu {
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+li {
+  line-height: 1.5rem;
+}

@@ -1,14 +1,12 @@
 import SodexoData from './modules/sodexo-data.js';
 import FazerData from './modules/fazer-data';
 
-//console.log(SodexoData.courses);
-console.log(FazerData.FazerEn);
-console.log(FazerData.FazerFi);
-
 let language = 'fi';
 let currentMenu = SodexoData.coursesFi;
+let currentFazer = FazerData.coursesFi;
 
 const menu = document.querySelector('#menu');
+const fazerMenu = document.querySelector('#fazerMenu');
 let menuOrder = 'asc';
 
 /**
@@ -23,6 +21,15 @@ const printMenu = () => {
   }
 };
 
+const printFazer = () => {
+  fazerMenu.innerHTML = '';
+  for (const item of currentFazer) {
+    const li = document.createElement('li');
+    li.textContent = item;
+    fazerMenu.appendChild(li);
+  }
+};
+
 /**
  * Switch language fi/en
  */
@@ -30,9 +37,11 @@ const switchLanguage = () => {
   if (language === 'fi') {
     language = 'en';
     currentMenu = SodexoData.coursesEn;
+    currentFazer = FazerData.coursesEn;
   } else {
     language = 'fi';
     currentMenu = SodexoData.coursesFi;
+    currentFazer = SodexoData.coursesFi;
   }
 };
 
@@ -59,14 +68,17 @@ const sortCourses = (courses, order) => {
  */
 const pickRandom = (courses) => {
   const randomIndex = Math.floor(Math.random() * currentMenu.length);
-  alert(currentMenu[randomIndex]);
+  const randomIndexF = Math.floor(Math.random() * currentFazer.length);
+  alert('Sodexo: ' + currentMenu[randomIndex] + ' \nFazer: ' + currentFazer[randomIndexF]);
 };
 
 printMenu();
+printFazer();
 
 document.querySelector('#vaihto').addEventListener('click', () => {
   switchLanguage();
   printMenu();
+  printFazer();
 });
 
 document.querySelector('#sort').addEventListener('click', () => {
