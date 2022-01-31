@@ -5,19 +5,20 @@ let language = 'fi';
 let currentMenu = SodexoData.coursesFi;
 let currentFazer = FazerData.coursesFi;
 
-const menu = document.querySelector('#menu');
+const sodexoMenu = document.querySelector('#sodexoMenu');
 const fazerMenu = document.querySelector('#fazerMenu');
 let menuOrder = 'asc';
 
 /**
+ *
  * Prints the menu on page
  */
 const printMenu = () => {
-  menu.innerHTML = '';
+  sodexoMenu.innerHTML = '';
   for (const item of currentMenu) {
     const li = document.createElement('li');
     li.textContent = item;
-    menu.appendChild(li);
+    sodexoMenu.appendChild(li);
   }
 };
 

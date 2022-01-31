@@ -3,9 +3,7 @@ html {
 }
 
 body {
-  width: 50%;
-  max-width: 800px;
-  min-width: 480px;
+  width: 90%;
   margin: 0 auto;
 }
 
@@ -15,24 +13,29 @@ body {
 }
 
 #container {
-  display: flex;
-  flex-flow: column wrap;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 50px;
+  grid-gap: 20px;
 }
 
 #buttonGroup {
   margin: 15px;
 }
-#menu {
-  border: 1px solid black;
-  border-radius: 10px;
-  padding: 10px;
-}
-#fazerMenu {
+.menuBox {
+  margin-top: 50px;
   border: 1px solid black;
   border-radius: 10px;
   padding: 10px;
 }
 
+
+ul {
+  padding: 5px;
+}
+
 li {
+  margin-left: 10px;
+  padding-left: 10px;
   line-height: 1.5rem;
 }
