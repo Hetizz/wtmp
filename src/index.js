@@ -1,82 +1,57 @@
-let randomNumber = Math.floor(Math.random() * 100) + 1;
+import FazerMenu from './assets/fazer.json';
 
-const guesses = document.querySelector('.guesses');
-const lastResult = document.querySelector('.lastResult');
-const lowOrHi = document.querySelector('.lowOrHi');
+const mealArray = [
+  {name: 'Lingonberry jam', price: 4.00},
+  {name: 'Mushroom and bean casserole', price: 5.50},
+  {name: 'Chili-flavoured wheat', price: 3.00},
+  {name: 'Vegetarian soup', price: 4.80},
+  {name: 'Pureed root vegetable soup with smoked cheese', price: 8.00}
+];
 
-const guessSubmit = document.querySelector('.guessSubmit');
-const guessField = document.querySelector('.guessField');
+/**
+ * Validates a name for meal
+ * @param {string} name
+ */
+const validateName = (name) => {
+  const namePattern = /^[A-ZÅÄÖ]{1}[aA-zåäöZÅÄÖ \-\/,()]{3,63}$/;
+  return namePattern.test(name);
+};
 
-let guessCount = 1;
-let resetButton;
+for (const meal of mealArray) {
+  console.log(meal.name, validateName(meal.name));
+};
 
-let startTime;
-let stopTime;
+//2. sort menu
+const sortedMeals = mealArray.sort((a,b) => a.price - b.price);
+console.log(sortedMeals);
 
-const checkGuess = () => {
-  const userGuess = Number(guessField.value);
-  if (guessCount === 1) {
-    guesses.textContent = 'Previous guesses: ';
-  }
-  guesses.textContent += userGuess + ' ';
+//3. items less than 5e
+const underFive = mealArray.filter(meal => meal.price < 5);
+console.log(underFive);
 
-  if (userGuess === randomNumber) {
-    stopTime = Date.now();
-    let time = Math.floor((stopTime - startTime)/1000);
-    lastResult.textContent = `Congratulations! You got it right! ${guessCount} guesses and ${time} seconds`;
-    lastResult.style.backgroundColor = 'green';
-    lowOrHi.textContent = '';
-    setGameOver();
-  } else if (guessCount === 10) {
-    stopTime = Date.now();
-    let time = Math.floor((stopTime - startTime)/1000);
-    lastResult.textContent = `!!!GAME OVER!!! ${guessCount} guesses and ${time} seconds`;
-    lowOrHi.textContent = '';
-    setGameOver();
-  } else {
-    lastResult.textContent = 'Wrong!';
-    lastResult.style.backgroundColor = 'red';
-    if(userGuess < randomNumber) {
-      lowOrHi.textContent = 'Last guess was too low!';
-    } else if(userGuess > randomNumber) {
-      lowOrHi.textContent = 'Last guess was too high!';
+//4. raise prices
+console.log(mealArray.map(meal => meal.price * 1.15));
+
+//5. whole menu price
+const mealSum = mealArray.reduce((a, b) => {
+  return {price: a.price + b.price};
+});
+console.log('Koko menu ', mealSum);
+
+//B - Fazer data
+const getVegeMeals = dayOfWeek => {
+  let vegeMeals = [];
+  for (const menu of FazerMenu.LunchMenus[dayOfWeek].SetMenus) {
+    for (const meal of menu.Meals) {
+      if (meal.Diets.includes('Veg')) {
+        vegeMeals.push(meal.Name);
+      }
     }
   }
-
-  guessCount++;
-  guessField.value = '';
-  guessField.focus();
+  return vegeMeals;
+};
+let pituus = FazerMenu.LunchMenus.length;
+for (let i = 0; i < pituus; i++) {
+  console.log(getVegeMeals(i));
 };
 
-const setGameOver = () => {
-  guessField.disabled = true;
-  guessSubmit.disabled = true;
-  resetButton = document.createElement('button');
-  resetButton.textContent = 'Start new game';
-  document.body.append(resetButton);
-  resetButton.addEventListener('click', resetGame);
-};
-
-const resetGame = () => {
-  startTime = Date.now();
-  guessCount = 1;
-
-  const resetParas = document.querySelectorAll('.resultParas p');
-  for (const resetPara of resetParas) {
-    resetPara.textContent = '';
-  }
-
-  resetButton.parentNode.removeChild(resetButton);
-
-  guessField.disabled = false;
-  guessSubmit.disabled = false;
-  guessField.value = '';
-  guessField.focus();
-
-  lastResult.style.backgroundColor = 'white';
-
-  randomNumber = Math.floor(Math.random() * 100) + 1;
-};
-
-setGameOver();
-guessSubmit.addEventListener('click', checkGuess);
