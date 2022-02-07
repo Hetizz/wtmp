@@ -1,25 +1,62 @@
-console.log('Hello console!');
-// testing draggable.js
-import {Sortable} from '@shopify/draggable';
-// console.log(new Sortable());
+//1. cheat code
+const createSecret = code => {
+  const keyHistory = [];
+  document.addEventListener('keypress', event => {
+    keyHistory.push(event.key);
+    if (keyHistory.length > code.length) {
+      keyHistory.shift();
+    }
+    console.log(keyHistory.join(''));
+    if (keyHistory.join('') === code) {
+      alert('cheat activated');
+    }
+  });
+};
+createSecret('kissa');
 
-new Sortable(document.querySelectorAll('ul'), {
-  draggable: 'li'
-});
+//2. x/y-coords of mouse double-click
+const clickCoords = () => {
+  const output = document.querySelector('#output');
+  document.addEventListener('dblclick', event => {
+    /*console.log(event);
+    console.log(event.x, event.y);*/
+    output.textContent = `Coordinates x: ${event.clientX} y: ${event.clientY}`;
+  });
+};
+clickCoords();
 
-let keyHistory = [];
-document.addEventListener('keyup', event => {
-  console.log('key event', event.key);
-  /*keyHistory.push(event.key);
-  if (event.key === 'Enter') {
-    console.log(keyHistory);
-    keyHistory = [];
-  }*/
-});
+//3. something that reacts only to touch
+const touchOnly = () => {
+  document.addEventListener('touchstart', event => {
+    console.log(event);
+  });
+};
+touchOnly();
 
-document.addEventListener('keydown', event => {
-  console.log('keydown:', event.key, event.keyCode);
-  if (event.keyCode === 13) {
-    console.log('You hit enter!');
-  }
-});
+//4. hurry up -timer
+const hurryUpTimer = delay => {
+  const output = document.querySelector('#output');
+  setTimeout(() => {
+    output.textContent = 'VAUHTIA!!!';
+  }, delay*1000);
+};
+//hurryUpTimer(5);
+
+
+//5. hurry up -timer advanced
+const hurryUpTimerPlus = delay => {
+  const output = document.querySelector('#output');
+
+  let timer;
+  const resetTimer = event => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      output.textContent = 'VAUHTIA!!!';
+    }, delay*1000);
+  };
+
+  resetTimer();
+  document.addEventListener('mousemove', resetTimer);
+  document.addEventListener('touchstart', resetTimer);
+};
+hurryUpTimerPlus(5);
