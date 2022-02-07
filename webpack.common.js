@@ -6,7 +6,7 @@ const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: {
-    app: './src/lunch.js',
+    app: './src/index.js',
   },
   plugins: [
     new CleanWebpackPlugin(),
@@ -19,11 +19,11 @@ module.exports = {
       },
     ]}),
     new HtmlWebpackPlugin({
-      title: 'Week 2 - task 3',
+      title: 'Week 3 - task 2',
       meta: {
         viewport: 'width=device-width, initial-scale=1.0'
       },
-      template: './src/lunch.html',
+      template: './src/index.html',
       minify: {
         removeComments: true,
         collapseWhitespace: true
