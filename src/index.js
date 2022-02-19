@@ -1,5 +1,7 @@
 import SodexoData from './modules/sodexo-data.js';
 import FazerData from './modules/fazer-data';
+import {fetchData} from './modules/network';
+import {getDayIndex} from './modules/tools';
 
 let language = 'fi';
 let menuOrder = 'asc';
@@ -75,17 +77,34 @@ const pickRandom = () => {
   alert('Sodexo: ' + currentMenu[randomIndex] + ' \nFazer: ' + currentFazer[randomIndexF]);
 };
 
-printMenu(SodexoData.coursesFi, 'sodexoMenu');
-printMenu(FazerData.coursesFi, 'fazerMenu');
+const init = () => {
 
-document.querySelector('#vaihto').addEventListener('click', () => {
-  switchLanguage();
-});
+  // TODO: real sodexo api (no proxy needed)
+  printMenu(SodexoData.coursesFi, 'sodexoMenu');
+  fetchData('https://www.sodexo.fi/ruokalistat/output/weekly_json/152').then(data => {
+    console.log(data);
+  });
 
-document.querySelector('#sort').addEventListener('click', () => {
-  sortCourses(currentMenu, currentFazer, menuOrder);
-});
+  // Fazer menu
+  fetchData(FazerData.dataUrlFi, 'fazer-php').then(data => {
+    // TODO: json.parse to network module
+    // ALLORIGINS -> const menuData = JSON.parse(data.contents);
+    console.log('fazer', data);
+    const courses = FazerData.createDayMenu(data.LunchMenus, getDayIndex());
+    printMenu(courses, 'fazerMenu');
+  });
 
-document.querySelector('#random').addEventListener('click', () => {
-  pickRandom();
-});
+  //Event listeners
+  document.querySelector('#vaihto').addEventListener('click', () => {
+    switchLanguage();
+  });
+
+  document.querySelector('#sort').addEventListener('click', () => {
+    sortCourses(currentMenu, currentFazer, menuOrder);
+  });
+
+  document.querySelector('#random').addEventListener('click', () => {
+    pickRandom();
+  });
+};
+init();
