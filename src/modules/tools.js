@@ -1,6 +1,7 @@
+const today = new Date().toISOString().split('T')[0];
+
 const getDayIndex = () => {
-  let weekday = new Date().getDay();
-  console.log('PÄIVÄMÄÄRÄ' , weekday);
+  let weekday = new Date().getDay() - 1;
   // weekend no service, use fridays menu
   if (weekday >= 5) {
     weekday = 4;
@@ -10,4 +11,4 @@ const getDayIndex = () => {
   return weekday;
 };
 
-export {getDayIndex};
+export {getDayIndex, today};

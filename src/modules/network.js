@@ -5,12 +5,14 @@
  * @param {string} useProxy - optional proxy
  */
 const fetchData = async (url, useProxy) => {
+
   if (useProxy === 'allorigins') {
     url = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
   } else if (useProxy === 'fazer-php') {
     const url2 = url.split('menu/')[1];
     url = `https://users.metropolia.fi/~hetahu/wtm/proxy/fazer-proxy.php/${url2}`;
   }
+
   let jsonData;
 
   try {
@@ -27,6 +29,7 @@ const fetchData = async (url, useProxy) => {
     console.error('fetchdata error', error);
     jsonData = {};
   }
+  //console.log(jsonData, 'json');
   return jsonData;
 };
 

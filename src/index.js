@@ -5,8 +5,9 @@ import {getDayIndex} from './modules/tools';
 
 let language = 'fi';
 let menuOrder = 'asc';
-let currentMenu = SodexoData.coursesFi;
-let currentFazer = FazerData.coursesFi;
+let currentMenu;
+let fazerFi;
+let fazerEn;
 
 /**
  * Prints sodexo menu on page
@@ -30,15 +31,13 @@ const switchLanguage = () => {
   if (language === 'fi') {
     language = 'en';
     currentMenu = SodexoData.coursesEn;
-    currentFazer = FazerData.coursesEn;
     printMenu(SodexoData.coursesEn, 'sodexoMenu');
-    printMenu(FazerData.coursesEn, 'fazerMenu');
+    printMenu(fazerEn, 'fazerMenu');
   } else {
     language = 'fi';
     currentMenu = SodexoData.coursesFi;
-    currentFazer = FazerData.coursesFi;
-    printMenu(SodexoData.coursesFi, 'sodexoMenu');
-    printMenu(FazerData.coursesFi, 'fazerMenu');
+    printMenu(currentMenu, 'sodexoMenu');
+    printMenu(fazerFi, 'fazerMenu');
   }
 };
 
@@ -73,25 +72,30 @@ const sortCourses = (courses1, courses2, order) => {
  */
 const pickRandom = () => {
   const randomIndex = Math.floor(Math.random() * currentMenu.length);
-  const randomIndexF = Math.floor(Math.random() * currentFazer.length);
-  alert('Sodexo: ' + currentMenu[randomIndex] + ' \nFazer: ' + currentFazer[randomIndexF]);
+  const randomIndexF = Math.floor(Math.random() * fazerFi.length);
+  alert('Sodexo: ' + currentMenu[randomIndex] + ' \nFazer: ' + fazerFi[randomIndexF]);
 };
 
 const init = () => {
 
-  // TODO: real sodexo api (no proxy needed)
-  printMenu(SodexoData.coursesFi, 'sodexoMenu');
-  fetchData('https://www.sodexo.fi/ruokalistat/output/weekly_json/152').then(data => {
-    console.log(data);
+  fetchData(SodexoData.dataUrlDaily).then(data => {
+    const courses = SodexoData.createMenus(data.courses);
+    printMenu(courses, 'sodexoMenu');
+    currentMenu = courses;
   });
+
 
   // Fazer menu
   fetchData(FazerData.dataUrlFi, 'fazer-php').then(data => {
-    // TODO: json.parse to network module
-    // ALLORIGINS -> const menuData = JSON.parse(data.contents);
-    console.log('fazer', data);
     const courses = FazerData.createDayMenu(data.LunchMenus, getDayIndex());
     printMenu(courses, 'fazerMenu');
+    fazerFi = courses;
+  });
+
+  //Fazer menu english
+  fetchData(FazerData.dataUrlEn, 'fazer-php').then(data => {
+    const courses = FazerData.createDayMenu(data.LunchMenus, getDayIndex());
+    fazerEn = courses;
   });
 
   //Event listeners
@@ -100,11 +104,16 @@ const init = () => {
   });
 
   document.querySelector('#sort').addEventListener('click', () => {
-    sortCourses(currentMenu, currentFazer, menuOrder);
+    if (language === 'en') {
+      sortCourses(currentMenu, fazerEn, menuOrder);
+    } else {
+      sortCourses(currentMenu, fazerFi, menuOrder);
+    }
   });
 
   document.querySelector('#random').addEventListener('click', () => {
     pickRandom();
   });
 };
+
 init();
